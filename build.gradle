@@ -9,6 +9,8 @@ buildscript {
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.1'
+        classpath 'com.jakewharton:butterknife-gradle-plugin:8.5.1'
     }
 }
 
@@ -20,4 +22,17 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+ext{
+    rxjava2Version = '2.0.5'
+    rxandroidVersion = '2.0.1'
+    rx2AndroidNetworking = '0.0.1'
+    gsonVersion = '2.8.0'
+
+    dagger2Version = '2.8'
+    butterKnifeVersion = '8.5.1'
+
+    greenDaoVersion = '3.2.0'
+    debugDBVersion = '1.0.0'
 }
