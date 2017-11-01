@@ -5,5 +5,5 @@ package com.zy.diary.data.db;
  * 数据库的操作接口
  */
 public interface DbHelper {
-    void saveDiary();
+    void saveDiary(Diary diary);
 }

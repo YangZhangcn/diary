@@ -8,10 +8,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.zy.diary.R;
+import com.zy.diary.data.DataManager;
 import com.zy.diary.data.network.model.ApiError;
 import com.zy.diary.utils.AppConstants;
 
+import javax.inject.Inject;
 import javax.net.ssl.HttpsURLConnection;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * Created by zhangyang on 2017/10/31.
@@ -22,6 +26,24 @@ public class BasePresenter<V extends MvpView> implements MvpPresenter<V> {
     private static final String TAG = "BasePresenter";
 
     private V mMvpView;
+
+    private final DataManager mDataManager;
+
+    private final CompositeDisposable mCompositeDisposable;
+
+    @Inject
+    public BasePresenter(DataManager dataManager, CompositeDisposable compositeDisposable) {
+        this.mDataManager = dataManager;
+        this.mCompositeDisposable = compositeDisposable;
+    }
+
+    public DataManager getDataManager() {
+        return mDataManager;
+    }
+
+    public CompositeDisposable getCompositeDisposable() {
+        return mCompositeDisposable;
+    }
 
     @Override
     public void onAttach(V mvpView) {

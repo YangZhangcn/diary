@@ -15,7 +15,7 @@ import javax.inject.Singleton;
 public class DbOpenHelper extends DaoMaster.OpenHelper {
 
     @Inject
-    public DbOpenHelper(Context context, String name) {
+    public DbOpenHelper(Context context) {
         super(context, AppConstants.DB_NAME);
     }
 
