@@ -31,11 +31,40 @@ public class ApplicationModule {
         this.mApplication = application;
     }
 
-//    @Provides
-//    @ApplicationContext
-//    Context provideContext() {
-//        return mApplication;
-//    }
+    @Provides
+    @ApplicationContext
+    Context provideContext() {
+        return mApplication;
+    }
+
+    @Provides
+    Application provideApplication() {
+        return mApplication;
+    }
+
+    @Provides
+    @Singleton
+    DbHelper provideDbHelper(DbHelperImpl appDbHelper) {
+        return appDbHelper;
+    }
+
+    @Provides
+    @Singleton
+    ApiHelper provideApiHelper(ApiHelperImpl appDbHelper) {
+        return appDbHelper;
+    }
+
+    @Provides
+    @Singleton
+    DataManager provideDataManager(DataManagerImpl appDataManager) {
+        return appDataManager;
+    }
+
+    @Provides
+    @Singleton
+    PrefHelper providePrefHelper(PrefHelperImpl prefHelper){
+        return prefHelper;
+    }
 
 }
 

@@ -3,6 +3,8 @@ package com.zy.diary.data.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.zy.diary.di.ActivityScope;
+import com.zy.diary.di.ApplicationContext;
 import com.zy.diary.utils.AppConstants;
 
 import javax.inject.Inject;
@@ -15,7 +17,7 @@ import javax.inject.Singleton;
 public class DbOpenHelper extends DaoMaster.OpenHelper {
 
     @Inject
-    public DbOpenHelper(Context context) {
+    public DbOpenHelper(@ApplicationContext Context context) {
         super(context, AppConstants.DB_NAME);
     }
 

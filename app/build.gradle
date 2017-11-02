@@ -48,6 +48,8 @@ dependencies {
     // dependency injection
     compile "com.google.dagger:dagger:$rootProject.dagger2Version"
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.dagger2Version"
+    provided 'javax.annotation:jsr250-api:1.0'
+    compile 'javax.inject:javax.inject:1'
 
     // code generator for view
     compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"

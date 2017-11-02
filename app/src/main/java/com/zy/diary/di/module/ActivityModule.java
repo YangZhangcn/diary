@@ -43,12 +43,6 @@ public class ActivityModule {
     }
 
     @Provides
-    @ApplicationContext
-    Context provideApplicationContext() {
-        return mActivity.getApplicationContext();
-    }
-
-    @Provides
     CompositeDisposable provideCompositeDisposable(){
         return new CompositeDisposable();
     }
@@ -59,24 +53,5 @@ public class ActivityModule {
         return presenter;
     }
 
-    @Provides
-    DbHelper provideDbHelper(DbHelperImpl appDbHelper) {
-        return appDbHelper;
-    }
-
-    @Provides
-    ApiHelper provideApiHelper(ApiHelperImpl appDbHelper) {
-        return appDbHelper;
-    }
-
-    @Provides
-    DataManager provideDataManager(DataManagerImpl appDataManager) {
-        return appDataManager;
-    }
-
-    @Provides
-    PrefHelper providePrefHelper(PrefHelperImpl prefHelper){
-        return prefHelper;
-    }
 
 }

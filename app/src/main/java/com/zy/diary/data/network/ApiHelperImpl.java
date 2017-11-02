@@ -20,8 +20,8 @@ public class ApiHelperImpl implements ApiHelper {
 
     @Override
     public Observable<WeatherResponse> doWeatherCall(String city) {
-        return Rx2AndroidNetworking.post("http://www.sojson.com/open/api/weather/json.shtml?city=%E5%8C%97%E4%BA%AC")
-                .addPathParameter("city",city)
+        return Rx2AndroidNetworking.get("http://www.sojson.com/open/api/weather/json.shtml")
+                .addQueryParameter("city",city)
                 .build()
                 .getObjectObservable(WeatherResponse.class);
     }

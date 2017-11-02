@@ -1,5 +1,7 @@
 package com.zy.diary.mvp.main;
 
+import android.util.Log;
+
 import com.zy.diary.data.DataManager;
 import com.zy.diary.data.network.model.WeatherResponse;
 import com.zy.diary.mvp.base.BasePresenter;
@@ -25,6 +27,7 @@ public class MainPresenterImpl<V extends MainView>extends BasePresenter<V> imple
 
     @Override
     public void getLocation(String city) {
+        Log.i("main,getLocation",city);
         getCompositeDisposable().add(getDataManager()
                 .doWeatherCall(city)
                 .subscribeOn(Schedulers.io())
@@ -32,12 +35,13 @@ public class MainPresenterImpl<V extends MainView>extends BasePresenter<V> imple
                 .subscribe(new Consumer<WeatherResponse>() {
                     @Override
                     public void accept(WeatherResponse weatherResponse) throws Exception {
+                        Log.i("mainPresenter",weatherResponse.getMessage());
                         getMvpView().onError(weatherResponse.getMessage());
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-
+                        throwable.printStackTrace();
                     }
                 }));
     }
