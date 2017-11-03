@@ -13,7 +13,6 @@ import javax.inject.Inject;
 /**
  * Created by zhangyang on 2017/10/31.
  */
-
 public class DiaryApplication extends Application {
 
     ApplicationComponent applicationComponent;
