@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -51,17 +52,19 @@ public abstract class BaseActivity extends AppCompatActivity implements MvpView{
         return mActivityComponent;
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
+    @Override
     public void requestPermissionsSafely(String[] permissions, int requestCode) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(permissions, requestCode);
-        }
+        ActivityCompat.requestPermissions(this,permissions,requestCode);
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
+    @Override
     public boolean hasPermission(String permission) {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
-                checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
+        return ActivityCompat.checkSelfPermission(this,permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
     }
 
     @Override
@@ -103,7 +106,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MvpView{
     }
 
     private void showSnackBar(String message) {
-        Snackbar snackbar = Snackbar.make(findViewById(R.id.cl_main),
+        Snackbar snackbar = Snackbar.make(findViewById(getSnackLayoutId()),
                 message, Snackbar.LENGTH_SHORT);
         View sbView = snackbar.getView();
         TextView textView = (TextView) sbView
@@ -111,6 +114,10 @@ public abstract class BaseActivity extends AppCompatActivity implements MvpView{
         textView.setTextColor(ContextCompat.getColor(this, R.color.white));
         snackbar.setAction("Action",null);
         snackbar.show();
+    }
+
+    public int getSnackLayoutId(){
+        return android.R.id.content;
     }
 
     @Override

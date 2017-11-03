@@ -1,5 +1,6 @@
 package com.zy.diary.mvp.base;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.androidnetworking.common.ANConstants;
@@ -48,6 +49,11 @@ public class BasePresenter<V extends MvpView> implements MvpPresenter<V> {
     @Override
     public void onAttach(V mvpView) {
         mMvpView = mvpView;
+    }
+
+    @Override
+    public void onPermissionResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
     }
 
     @Override

@@ -60,101 +60,95 @@ public class MainActivity extends BaseActivity implements MainView{
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                        ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissionsSafely(permissions, 200);
-                } else {
-                    getLocalAddress();
-                }
+
             }
         });
 
     }
 
     @Override
+    public int getSnackLayoutId() {
+        return R.id.cl_main;
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            Snackbar.make(fab, "权限缺失", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show();
-            onError("权限缺失");
-            return;
-        }
-        getLocalAddress();
+        mPresenter.onPermissionResult(requestCode,permissions,grantResults);
     }
 
-    private void getLocalAddress() {
-        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        String bestProvider = lm.getBestProvider(getCriteria(), false);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            Snackbar.make(fab, "权限缺失", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show();
-            onError("权限缺失");
-            return;
-        }
-        lm.requestLocationUpdates(bestProvider, 5000, 8, new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                String addressByGeoPoint = getAddressByGeoPoint(location.getLatitude(), location.getLongitude());
-//                Snackbar.make(fab, addressByGeoPoint, Snackbar.LENGTH_LONG).setAction("Action",null).show();
-                mPresenter.getLocation(addressByGeoPoint);
-                onError(addressByGeoPoint);
-                lm.removeUpdates(this);
-            }
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String s) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String s) {
-
-            }
-        });
-    }
+//    @Override
+//    public void getLocalAddress() {
+//        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//        String bestProvider = lm.getBestProvider(getCriteria(), false);
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+//                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+////            Snackbar.make(fab, "权限缺失", Snackbar.LENGTH_LONG)
+////                    .setAction("Action", null).show();
+//            onError("权限缺失");
+//            return;
+//        }
+//        lm.requestLocationUpdates(bestProvider, 5000, 8, new LocationListener() {
+//            @Override
+//            public void onLocationChanged(Location location) {
+//                String addressByGeoPoint = getAddressByGeoPoint(location.getLatitude(), location.getLongitude());
+////                Snackbar.make(fab, addressByGeoPoint, Snackbar.LENGTH_LONG).setAction("Action",null).show();
+//                mPresenter.getLocation(addressByGeoPoint);
+//                onError(addressByGeoPoint);
+//                lm.removeUpdates(this);
+//            }
+//
+//            @Override
+//            public void onStatusChanged(String s, int i, Bundle bundle) {
+//
+//            }
+//
+//            @Override
+//            public void onProviderEnabled(String s) {
+//
+//            }
+//
+//            @Override
+//            public void onProviderDisabled(String s) {
+//
+//            }
+//        });
+//    }
 
     //从经纬度取得Address
-    public String getAddressByGeoPoint(double Latitude, double Longitude) {
-        String strReturn = "";
-        try {
-	      /* 创建Geocoder对象，用于获得指定地点的地址 */
-            Geocoder gc = new Geocoder(MainActivity.this, Locale.getDefault());
+//    public String getAddressByGeoPoint(double Latitude, double Longitude) {
+//        String strReturn = "";
+//        try {
+//	      /* 创建Geocoder对象，用于获得指定地点的地址 */
+//            Geocoder gc = new Geocoder(MainActivity.this, Locale.getDefault());
+//
+//	      /* 自经纬度取得地址（可能有多行）*/
+//            List<Address> lstAddress = gc.getFromLocation(Latitude, Longitude, 1);
+//            StringBuilder sb = new StringBuilder();
+//
+//	      /* 判断地址是否为多行 */
+//            if (lstAddress.size() > 0) {
+//                Address adsLocation = lstAddress.get(0);
+//                sb.append(adsLocation.getLocality());  //当前经纬度所在的城市（市）
+//            }
+//            strReturn = sb.toString();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return strReturn;
+//    }
 
-	      /* 自经纬度取得地址（可能有多行）*/
-            List<Address> lstAddress = gc.getFromLocation(Latitude, Longitude, 1);
-            StringBuilder sb = new StringBuilder();
-
-	      /* 判断地址是否为多行 */
-            if (lstAddress.size() > 0) {
-                Address adsLocation = lstAddress.get(0);
-                sb.append(adsLocation.getLocality());  //当前经纬度所在的城市（市）
-            }
-            strReturn = sb.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return strReturn;
-    }
-
-    private Criteria getCriteria() {
-        // TODO Auto-generated method stub
-        Criteria c = new Criteria();
-        c.setAccuracy(Criteria.ACCURACY_COARSE);
-        c.setSpeedRequired(false);
-        c.setCostAllowed(false);
-        c.setBearingRequired(false);
-        c.setAltitudeRequired(false);
-        c.setPowerRequirement(Criteria.POWER_LOW);
-        return c;
-    }
+//    private Criteria getCriteria() {
+//        // TODO Auto-generated method stub
+//        Criteria c = new Criteria();
+//        c.setAccuracy(Criteria.ACCURACY_COARSE);
+//        c.setSpeedRequired(false);
+//        c.setCostAllowed(false);
+//        c.setBearingRequired(false);
+//        c.setAltitudeRequired(false);
+//        c.setPowerRequirement(Criteria.POWER_LOW);
+//        return c;
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

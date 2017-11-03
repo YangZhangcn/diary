@@ -1,5 +1,6 @@
 package com.zy.diary.mvp.base;
 
+import android.content.Context;
 import android.support.annotation.StringRes;
 
 /**
@@ -18,4 +19,10 @@ public interface MvpView {
     boolean isNetworkConnected();
 
     void hideKeyboard();
+
+    boolean hasPermission(String permission);
+
+    void requestPermissionsSafely(String[] permissions, int requestCode);
+
+    Context getContext();
 }

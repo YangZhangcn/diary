@@ -7,4 +7,7 @@ import com.zy.diary.mvp.base.MvpView;
  */
 
 public interface MainView extends MvpView {
+
+//    void getLocalAddress();
+
 }

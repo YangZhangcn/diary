@@ -7,5 +7,6 @@ import com.zy.diary.mvp.base.MvpPresenter;
  */
 
 public interface MainPresenter<V extends MainView> extends MvpPresenter<V> {
+
     void getLocation(String City);
 }
