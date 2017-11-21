@@ -2,6 +2,7 @@ package com.zy.diary.mvp.main;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Criteria;
@@ -15,9 +16,12 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import com.zy.diary.data.DataManager;
+import com.zy.diary.data.db.model.Diary;
 import com.zy.diary.data.network.model.WeatherResponse;
 import com.zy.diary.mvp.base.BasePresenter;
+import com.zy.diary.mvp.edit.EditDiaryActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -43,6 +47,7 @@ public class MainPresenterImpl<V extends MainView>extends BasePresenter<V> imple
     @Override
     public void onAttach(V mvpView) {
         super.onAttach(mvpView);
+        getDiaries();
         if(getMvpView().hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION) && getMvpView().hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)){
             getLocalAddress();
         }else {
@@ -59,77 +64,41 @@ public class MainPresenterImpl<V extends MainView>extends BasePresenter<V> imple
         getLocalAddress();
     }
 
-    public void getLocalAddress() {
-        final LocationManager lm = (LocationManager) getMvpView().getContext().getSystemService(Context.LOCATION_SERVICE);
-        String bestProvider = lm.getBestProvider(getCriteria(), false);
-        if (ActivityCompat.checkSelfPermission(getMvpView().getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(getMvpView().getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            getMvpView().onError("权限缺失");
-            return;
-        }
-        lm.requestLocationUpdates(bestProvider, 5000, 8, new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                String addressByGeoPoint = getAddressByGeoPoint(location.getLatitude(), location.getLongitude());
-                getLocation(addressByGeoPoint);
-                lm.removeUpdates(this);
-            }
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String s) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String s) {
-
-            }
-        });
-    }
-
-    //从经纬度取得Address
-    public String getAddressByGeoPoint(double Latitude, double Longitude) {
-        String strReturn = "";
-        try {
-	      /* 创建Geocoder对象，用于获得指定地点的地址 */
-            Geocoder gc = new Geocoder(getMvpView().getContext(), Locale.getDefault());
-
-	      /* 自经纬度取得地址（可能有多行）*/
-            List<Address> lstAddress = gc.getFromLocation(Latitude, Longitude, 1);
-            StringBuilder sb = new StringBuilder();
-
-	      /* 判断地址是否为多行 */
-            if (lstAddress.size() > 0) {
-                Address adsLocation = lstAddress.get(0);
-                sb.append(adsLocation.getLocality());  //当前经纬度所在的城市（市）
-            }
-            strReturn = sb.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return strReturn;
-    }
-
-    private Criteria getCriteria() {
-        // TODO Auto-generated method stub
-        Criteria c = new Criteria();
-        c.setAccuracy(Criteria.ACCURACY_COARSE);
-        c.setSpeedRequired(false);
-        c.setCostAllowed(false);
-        c.setBearingRequired(false);
-        c.setAltitudeRequired(false);
-        c.setPowerRequirement(Criteria.POWER_LOW);
-        return c;
+    @Override
+    public void onLocationChange(String city) {
+        getDataManager().saveLocalCity(city);
+//        getWeather(city);
     }
 
     @Override
-    public void getLocation(String city) {
-        Log.i("main,getLocation",city);
+    public List<Diary> getDiaries() {
+        List<Diary> diaries = new ArrayList<>();
+        for (int i=0;i<5;i++){
+            //long id, String date, String weather, String content, String tags,String title
+            diaries.add(new Diary(i,"20171121","晴","内容","标签","标题"));
+        }
+        if (diaries != null && diaries.size()>0){
+            getMvpView().hideEmptyTip();
+            getMvpView().showDiaries(diaries);
+        }else {
+            getMvpView().showEmptyTip("还没有写过日记哦");
+        }
+        return diaries;
+    }
+
+    @Override
+    public void gotoEditPage(Diary diary) {
+        getMvpView().getContext().startActivity(new Intent(getMvpView().getContext(), EditDiaryActivity.class));
+    }
+
+    @Override
+    public List<Diary> searchDairy(String info, int type) {
+        return null;
+    }
+
+    @Override
+    public void getWeather(String city) {
+        Log.i("main,getWeather",city);
         getCompositeDisposable().add(getDataManager()
                 .doWeatherCall(city)
                 .subscribeOn(Schedulers.io())
@@ -147,4 +116,5 @@ public class MainPresenterImpl<V extends MainView>extends BasePresenter<V> imple
                     }
                 }));
     }
+
 }

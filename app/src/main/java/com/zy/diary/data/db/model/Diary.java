@@ -1,4 +1,4 @@
-package com.zy.diary.data.db;
+package com.zy.diary.data.db.model;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;

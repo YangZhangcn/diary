@@ -4,6 +4,7 @@ import com.zy.diary.app.DiaryApplication;
 import com.zy.diary.di.ActivityScope;
 import com.zy.diary.di.module.ActivityModule;
 import com.zy.diary.di.module.ApplicationModule;
+import com.zy.diary.mvp.main.DiaryItemHolder;
 import com.zy.diary.mvp.main.MainActivity;
 
 import javax.inject.Singleton;

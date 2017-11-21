@@ -134,4 +134,5 @@ public abstract class BaseActivity extends AppCompatActivity implements MvpView{
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
 }

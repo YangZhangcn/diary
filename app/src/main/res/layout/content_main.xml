@@ -1,16 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zy.diary.widget.SwipeRefreshWithEmptyLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#eeeeee"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    app:scrollableChildId="@+id/rv_main"
     tools:context="com.zy.diary.mvp.main.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_main"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_empty_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawablePadding="@dimen/margin_small"
+            android:drawableStart="@drawable/ic_pets_black_24dp"
+            android:drawableTint="@color/colorPrimary"
+            android:gravity="center"
+            android:lines="1"
+            android:text="还没有写过日记哦"
+            android:textSize="@dimen/text_size_small"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+    </FrameLayout>
+
+
+</com.zy.diary.widget.SwipeRefreshWithEmptyLayout>

@@ -1,3 +1,11 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="margin_tiny">4dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_common">16dp</dimen>
+    <dimen name="width_icon">24dp</dimen>
+    <dimen name="text_size_big">20sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="radius_card_common">10dp</dimen>
+    <dimen name="padding_small">10dp</dimen>
 </resources>

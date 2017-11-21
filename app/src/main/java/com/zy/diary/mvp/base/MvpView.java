@@ -25,4 +25,6 @@ public interface MvpView {
     void requestPermissionsSafely(String[] permissions, int requestCode);
 
     Context getContext();
+
+
 }

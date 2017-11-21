@@ -16,17 +16,25 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zy.diary.R;
+import com.zy.diary.data.db.model.Diary;
 import com.zy.diary.mvp.base.BaseActivity;
+import com.zy.diary.widget.GapItemDecoration;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,10 +52,13 @@ public class MainActivity extends BaseActivity implements MainView{
     @BindView(R.id.rv_main)
     RecyclerView rvMain;
 
-    private String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+    @BindView(R.id.tv_empty_tip)
+    TextView tvEmptyTip;
 
     @Inject
     MainPresenter<MainView> mPresenter;
+
+    DiaryListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +66,17 @@ public class MainActivity extends BaseActivity implements MainView{
         setContentView(R.layout.activity_main);
         setUnbinder(ButterKnife.bind(this));
         getActivityComponent().inject(this);
+        rvMain.setLayoutManager(new LinearLayoutManager(this));
+        rvMain.addItemDecoration(new GapItemDecoration(this));
+        adapter = new DiaryListAdapter(mPresenter);
+        rvMain.setAdapter(adapter);
+        hideEmptyTip();
         mPresenter.onAttach(this);
         setSupportActionBar(toolbar);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                mPresenter.gotoEditPage(null);
             }
         });
 
@@ -77,78 +93,6 @@ public class MainActivity extends BaseActivity implements MainView{
         mPresenter.onPermissionResult(requestCode,permissions,grantResults);
     }
 
-//    @Override
-//    public void getLocalAddress() {
-//        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        String bestProvider = lm.getBestProvider(getCriteria(), false);
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-//                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-////            Snackbar.make(fab, "权限缺失", Snackbar.LENGTH_LONG)
-////                    .setAction("Action", null).show();
-//            onError("权限缺失");
-//            return;
-//        }
-//        lm.requestLocationUpdates(bestProvider, 5000, 8, new LocationListener() {
-//            @Override
-//            public void onLocationChanged(Location location) {
-//                String addressByGeoPoint = getAddressByGeoPoint(location.getLatitude(), location.getLongitude());
-////                Snackbar.make(fab, addressByGeoPoint, Snackbar.LENGTH_LONG).setAction("Action",null).show();
-//                mPresenter.getLocation(addressByGeoPoint);
-//                onError(addressByGeoPoint);
-//                lm.removeUpdates(this);
-//            }
-//
-//            @Override
-//            public void onStatusChanged(String s, int i, Bundle bundle) {
-//
-//            }
-//
-//            @Override
-//            public void onProviderEnabled(String s) {
-//
-//            }
-//
-//            @Override
-//            public void onProviderDisabled(String s) {
-//
-//            }
-//        });
-//    }
-
-    //从经纬度取得Address
-//    public String getAddressByGeoPoint(double Latitude, double Longitude) {
-//        String strReturn = "";
-//        try {
-//	      /* 创建Geocoder对象，用于获得指定地点的地址 */
-//            Geocoder gc = new Geocoder(MainActivity.this, Locale.getDefault());
-//
-//	      /* 自经纬度取得地址（可能有多行）*/
-//            List<Address> lstAddress = gc.getFromLocation(Latitude, Longitude, 1);
-//            StringBuilder sb = new StringBuilder();
-//
-//	      /* 判断地址是否为多行 */
-//            if (lstAddress.size() > 0) {
-//                Address adsLocation = lstAddress.get(0);
-//                sb.append(adsLocation.getLocality());  //当前经纬度所在的城市（市）
-//            }
-//            strReturn = sb.toString();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return strReturn;
-//    }
-
-//    private Criteria getCriteria() {
-//        // TODO Auto-generated method stub
-//        Criteria c = new Criteria();
-//        c.setAccuracy(Criteria.ACCURACY_COARSE);
-//        c.setSpeedRequired(false);
-//        c.setCostAllowed(false);
-//        c.setBearingRequired(false);
-//        c.setAltitudeRequired(false);
-//        c.setPowerRequirement(Criteria.POWER_LOW);
-//        return c;
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -163,5 +107,23 @@ public class MainActivity extends BaseActivity implements MainView{
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void showDiaries(List<Diary> diaries) {
+        adapter.setDiaries(diaries);
+    }
+
+    @Override
+    public void showEmptyTip(CharSequence info) {
+        rvMain.setVisibility(View.GONE);
+        tvEmptyTip.setVisibility(View.VISIBLE);
+        tvEmptyTip.setText(info);
+    }
+
+    @Override
+    public void hideEmptyTip() {
+        rvMain.setVisibility(View.VISIBLE);
+        tvEmptyTip.setVisibility(View.GONE);
     }
 }

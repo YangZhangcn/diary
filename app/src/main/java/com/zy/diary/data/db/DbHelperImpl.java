@@ -1,5 +1,9 @@
 package com.zy.diary.data.db;
 
+import com.zy.diary.data.db.model.Diary;
+
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -19,5 +23,10 @@ public class DbHelperImpl implements DbHelper {
     @Override
     public void saveDiary(Diary diary) {
         mDaoSession.getDiaryDao().insert(diary);
+    }
+
+    @Override
+    public List<Diary> getDiaryList() {
+        return mDaoSession.getDiaryDao().loadAll();
     }
 }

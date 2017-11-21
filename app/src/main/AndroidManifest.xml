@@ -25,6 +25,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".mvp.edit.EditDiaryActivity"
+            android:windowSoftInputMode="stateUnchanged"/>
+
     </application>
 
 </manifest>

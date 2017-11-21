@@ -3,11 +3,13 @@ package com.zy.diary.data;
 import android.content.Context;
 
 import com.zy.diary.data.db.DbHelper;
-import com.zy.diary.data.db.Diary;
+import com.zy.diary.data.db.model.Diary;
 import com.zy.diary.data.network.ApiHelper;
 import com.zy.diary.data.network.model.WeatherResponse;
 import com.zy.diary.data.pref.PrefHelper;
 import com.zy.diary.di.ApplicationContext;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -44,5 +46,20 @@ public class DataManagerImpl implements DataManager {
     @Override
     public void saveDiary(Diary diary) {
         mDbHelper.saveDiary(diary);
+    }
+
+    @Override
+    public List<Diary> getDiaryList() {
+        return mDbHelper.getDiaryList();
+    }
+
+    @Override
+    public void saveLocalCity(String city) {
+        mPreferencesHelper.saveLocalCity(city);
+    }
+
+    @Override
+    public String getLocalCity() {
+        return mPreferencesHelper.getLocalCity();
     }
 }
