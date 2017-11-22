@@ -43,7 +43,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends BaseActivity implements MainView{
+public class MainActivity extends BaseActivity implements MainView {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -90,7 +90,7 @@ public class MainActivity extends BaseActivity implements MainView{
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        mPresenter.onPermissionResult(requestCode,permissions,grantResults);
+        mPresenter.onPermissionResult(requestCode, permissions, grantResults);
     }
 
 
@@ -100,6 +100,7 @@ public class MainActivity extends BaseActivity implements MainView{
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -108,6 +109,7 @@ public class MainActivity extends BaseActivity implements MainView{
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public void showDiaries(List<Diary> diaries) {

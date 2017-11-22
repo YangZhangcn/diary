@@ -26,7 +26,7 @@
         </activity>
 
         <activity android:name=".mvp.edit.EditDiaryActivity"
-            android:windowSoftInputMode="stateUnchanged"/>
+            android:windowSoftInputMode="adjustResize"/>
 
     </application>
 
